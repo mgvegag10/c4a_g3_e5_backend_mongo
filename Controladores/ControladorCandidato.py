@@ -1,3 +1,5 @@
+from flask import request
+
 from Modelos.Candidato import Candidato
 from Modelos.Partido import Partido
 from Repositorios.RepositorioCandidato import RepositorioCandidato
@@ -12,6 +14,12 @@ class ControladorCandidato():
         return self.repositorioCandidato.findAll()
 
     def create(self, infoCandidato):
+        # Solicita los datos de la llave en el JSON
+        cedula = infoCandidato['numero']
+        numeroResolucion = infoCandidato['numeroResolucion']
+        nombre = infoCandidato['nombre']
+        apellido = infoCandidato['apellido']
+
         nuevoCandidato = Candidato(infoCandidato)
         return self.repositorioCandidato.save(nuevoCandidato)
 
@@ -21,8 +29,9 @@ class ControladorCandidato():
 
     def update(self, id, infoCandidato):
         candidatoActual = Candidato(self.repositorioCandidato.findById(id))
+
         candidatoActual.cedula = infoCandidato["cedula"]
-        candidatoActual.num_resolucion = infoCandidato["num_resolucion"]
+        candidatoActual.numeroResolucion = infoCandidato["numeroResolucion"]
         candidatoActual.nombre = infoCandidato["nombre"]
         candidatoActual.apellido = infoCandidato["apellido"]
         return self.repositorioCandidato.save(candidatoActual)

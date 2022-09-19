@@ -1,4 +1,4 @@
-import pymongo
+import pymongo as pymongo
 import certifi
 from bson import DBRef
 from bson.objectid import ObjectId
@@ -11,8 +11,8 @@ class InterfaceRepositorio(Generic[T]):
     def __init__(self):
         ca = certifi.where()
         dataConfig = self.loadFileConfig()
-        client = pymongo.MongoClient(dataConfig["data-db-connection"], tlsCAFile=ca)
-        self.baseDatos = client[dataConfig["name-db"]]
+        client = pymongo.MongoClient("mongodb+srv://mgvegag:Mongodb2022@cluster0.txsluqq.mongodb.net/?retryWrites=true&w=majority", tlsCAFile=ca)
+        self.baseDatos = client["c4a_g3_e5_backend"]
         theClass = get_args(self.__orig_bases__[0])
         self.coleccion = theClass[0].__name__.lower()
 
