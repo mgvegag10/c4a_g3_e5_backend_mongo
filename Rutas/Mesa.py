@@ -7,8 +7,11 @@ mesa = Blueprint('mesa',__name__)
 
 @mesa.route("/mesas",methods=['GET'])
 def getMesas():
-    json=miControladorMesa.index()
-    return jsonify(json)
+    try:
+        json = miControladorMesa.index()
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'Ha ocurrido el siguiente error con el siguiente parametro':str(ex)})
 @mesa.route("/mesas",methods=['POST'])
 def crearMesa():
     try:

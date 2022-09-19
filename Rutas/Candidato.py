@@ -11,30 +11,48 @@ def test():
     json["message"]="Server running ..."
     return jsonify(json)
 @candidato.route("/candidatos",methods=['GET'])
-def getPartidos():
-    json=miControladorCandidato.index()
-    return jsonify(json)
+def getCandidatos():
+    try:
+        json = miControladorCandidato.index()
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'Ha ocurrido el siguiente error con el siguiente parametro':str(ex)})
 @candidato.route("/candidatos",methods=['POST'])
-def crearPartido():
-    data = request.get_json()
-    json=miControladorCandidato.create(data)
-    return jsonify(json)
+def crearCandidato():
+    try:
+        data = request.get_json()
+        json = miControladorCandidato.create(data)
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'Ha ocurrido el siguiente error con el siguiente parametro':str(ex)})
 @candidato.route("/candidatos/<string:id>",methods=['GET'])
-def getPartido(id):
-    json=miControladorCandidato.show(id)
-    return jsonify(json)
+def getCandidato(id):
+    try:
+        json = miControladorCandidato.show(id)
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'ERROR - ID de candidato no valido o no encontrado, verifica el ID del candidato a buscar':str(ex)})
 @candidato.route("/candidatos/<string:id>",methods=['PUT'])
-def modificarPartido(id):
-    data = request.get_json()
-    json=miControladorCandidato.update(id,data)
-    return jsonify(json)
+def modificarCandidato(id):
+    try:
+        data = request.get_json()
+        json = miControladorCandidato.update(id, data)
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'ERROR - ID de Candidato no valido o no encontrado, verifica el ID del Candidato a buscar':str(ex)})
 
 @candidato.route("/candidatos/<string:id>",methods=['DELETE'])
-def eliminarPartido(id):
-    json=miControladorCandidato.delete(id)
-    return jsonify(json)
+def eliminarCandidato(id):
+    try:
+        json = miControladorCandidato.delete(id)
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'ERROR - ID de Candidato no valido o no encontrado, verifica el ID del Candidato a buscar':str(ex)})
 
 @candidato.route("/candidatos/<string:id>/partido/<string:id_partido>",methods=['PUT'])
-def asignarPartidoACandidato(id,id_partido):
-    json=miControladorCandidato.asignarPartido(id,id_partido)
-    return jsonify(json)
+def asignarPartidoAlCandidato(id,id_partido):
+    try:
+        json = miControladorCandidato.asignarPartido(id, id_partido)
+        return jsonify(json)
+    except Exception as ex:
+        return jsonify({'ERROR - Verificar los ID asignados de candidato o ID asignados de partido':str(ex)})
