@@ -24,7 +24,7 @@ def getMesa(id):
         json=miControladorMesa.show(id)
         return jsonify(json)
     except Exception as ex:
-        return jsonify({'ID de mesa no valido o no encontrado, verifica el ID de mesa buscar - ERROR ':str(ex)})
+        return jsonify({'ERROR - ID de mesa no valido o no encontrado, verifica el ID de mesa buscar ':str(ex)})
 @mesa.route("/mesas/<string:id>",methods=['PUT'])
 def modificarMesa(id):
     try:
@@ -32,7 +32,7 @@ def modificarMesa(id):
         json=miControladorMesa.update(id,data)
         return jsonify(json)
     except Exception as ex:
-        return jsonify({'Ha ocurrido el siguiente error con el siguiente parametro':str(ex)})
+        return jsonify({'ERROR - ID de mesa no valido o no encontrado, verifica el ID de mesa buscar':str(ex)})
 
 @mesa.route("/mesas/<string:id>",methods=['DELETE'])
 def eliminarMesa(id):
@@ -40,4 +40,4 @@ def eliminarMesa(id):
         json = miControladorMesa.delete(id)
         return jsonify(json)
     except Exception as ex:
-        return jsonify({'Ha ocurrido el siguiente error con el siguiente parametro':str(ex)})
+        return jsonify({'ERROR - ID de mesa no valido o no encontrado, verifica el ID de mesa buscar':str(ex)})

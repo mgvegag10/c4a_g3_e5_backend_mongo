@@ -13,9 +13,15 @@ class ControladorMesa():
         #Solicita los datos de la llave en el JSON
         numero = infoMesa['numero']
         cantidadInscritos = infoMesa['cantidadInscritos']
+        mesas = self.repositorioMesa.findAll()
+
         #Validación de datos
+        for mesa in mesas:
+            if mesa['numero']==numero:
+                return ' ERROR - El nombre de la mesa se repite'
+
         if numero == "" or cantidadInscritos == "":
-            return jsonify({'Alguno de los parametros está vacio'})
+            return 'ERROR - Alguno de los parametros está vacio'
         else:
             # Crea la mesa
             nuevaMesa = Mesa(infoMesa)
