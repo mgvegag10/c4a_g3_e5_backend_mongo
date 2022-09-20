@@ -8,16 +8,27 @@ class ControladorPartido():
     def index(self):
         return self.repositorioPartido.findAll()
     def create(self,infoPartido):
-        nuevoPartido=Partido(infoPartido)
-        return self.repositorioPartido.save(nuevoPartido)
+        if (len(infoPartido)>2):
+            raise ValueError("Cantidad de argumentos invalidos")
+        if ("nombre" and "lema") in infoPartido:
+            nuevoPartido=Partido(infoPartido)
+            return self.repositorioPartido.save(nuevoPartido)
+        else:
+            raise ValueError("Faltan argumentos")
+        
     def show(self,id):
         elPartido=Partido(self.repositorioPartido.findById(id))
         return elPartido.__dict__
     def update(self,id,infoPartido):
         partidoActual=Partido(self.repositorioPartido.findById(id))
-        partidoActual.nombre = infoPartido["nombre"]
-        partidoActual.lema = infoPartido["lema"]
-        return self.repositorioPartido.save(partidoActual)
+        if ("nombre" and "lema") in infoPartido:
+            partidoActual.nombre = infoPartido["nombre"]
+            partidoActual.lema = infoPartido["lema"]
+            return self.repositorioPartido.save(partidoActual)
+        else:
+            raise ValueError("Faltan argumentos")
+
+        
     def delete(self,id):
         return self.repositorioPartido.delete(id)
 
