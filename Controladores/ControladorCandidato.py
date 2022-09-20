@@ -55,6 +55,3 @@ class ControladorCandidato():
             partidoActual = Partido(self.repositorioPartido.findById(id_partido))
             candidatoActual.partido = partidoActual
             return self.repositorioCandidato.save(candidatoActual)
-
-
-

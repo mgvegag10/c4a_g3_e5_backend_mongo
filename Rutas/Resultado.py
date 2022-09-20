@@ -29,7 +29,7 @@ def crearResultado(id_candidato,id_mesa):
     except Exception as e:
         strE = format(e)
         if strE.__contains__('keys'):
-            return jsonify('Ha ocurrido el siguiente error : Las id de candidato y / o mesa no existen'),400
+            return jsonify('Ha ocurrido el siguiente error : Los id de candidato y / o mesa no existen'),400
         else:
             return jsonify('Ha ocurrido el siguiente error : ' + strE),500
 
@@ -60,7 +60,7 @@ def modificarResultado(id,id_candidato,id_mesa):
     except Exception as e:
         strE = format(e)
         if strE.__contains__('keys'):
-            return jsonify('Ha ocurrido el siguiente error : El id del resultado y /o los id de candidato y / o mesa no existen'), 400
+            return jsonify('Ha ocurrido el siguiente error : Los id del resultado, candidato y / o mesa no existen'), 400
         else:
             return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
