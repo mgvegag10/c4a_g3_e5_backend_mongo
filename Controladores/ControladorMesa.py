@@ -18,10 +18,10 @@ class ControladorMesa():
         #Validación de datos
         for mesa in mesas:
             if mesa['numero']==numero:
-                return ' ERROR - El nombre de la mesa se repite'
+                raise ValueError("ERROR - El nombre de la mesa se repite")
 
         if numero == "" or cantidadInscritos == "":
-            return 'ERROR - Alguno de los parametros está vacio'
+            raise ValueError("ERROR - Alguno de los parametros está vacio")
         else:
             # Crea la mesa
             nuevaMesa = Mesa(infoMesa)

@@ -15,10 +15,16 @@ class ControladorCandidato():
 
     def create(self, infoCandidato):
         # Solicita los datos de la llave en el JSON
-        cedula = infoCandidato['numero']
+        cedula = infoCandidato['cedula']
         numeroResolucion = infoCandidato['numeroResolucion']
         nombre = infoCandidato['nombre']
         apellido = infoCandidato['apellido']
+        candidatos = self.repositorioCandidato.findAll()
+
+        # Validación de datos
+        for candidato in candidatos:
+            if candidato['numeroResolucion'] == numeroResolucion:
+                raise ValueError("ERROR - El numero de Resolución del candidato se repite")
 
         nuevoCandidato = Candidato(infoCandidato)
         return self.repositorioCandidato.save(nuevoCandidato)
@@ -29,7 +35,6 @@ class ControladorCandidato():
 
     def update(self, id, infoCandidato):
         candidatoActual = Candidato(self.repositorioCandidato.findById(id))
-
         candidatoActual.cedula = infoCandidato["cedula"]
         candidatoActual.numeroResolucion = infoCandidato["numeroResolucion"]
         candidatoActual.nombre = infoCandidato["nombre"]

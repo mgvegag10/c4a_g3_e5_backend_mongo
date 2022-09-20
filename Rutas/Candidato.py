@@ -5,11 +5,6 @@ miControladorCandidato = ControladorCandidato()
 
 candidato = Blueprint('candidato',__name__)
 
-@candidato.route("/",methods=['GET'])
-def test():
-    json = {}
-    json["message"]="Server running ..."
-    return jsonify(json)
 @candidato.route("/candidatos",methods=['GET'])
 def getCandidatos():
     try:
