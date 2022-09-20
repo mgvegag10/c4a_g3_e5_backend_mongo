@@ -12,7 +12,7 @@ def test():
     return jsonify(json)
 
 @candidato.route("/candidatos",methods=['GET'])
-def getPartidos():
+def getCandidatos():
     try:
         json=miControladorCandidato.index()
         return jsonify(json),202
@@ -21,7 +21,7 @@ def getPartidos():
         return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
 @candidato.route("/candidatos",methods=['POST'])
-def crearPartido():
+def crearCandidato():
     try:
         data = request.get_json()
         if ("cedula" and "num_resolucion" and "nombre" and "apellido") in data:
@@ -37,7 +37,7 @@ def crearPartido():
         return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
 @candidato.route("/candidatos/<string:id>",methods=['GET'])
-def getPartido(id):
+def getCandidato(id):
     try:
         json=miControladorCandidato.show(id)
         return jsonify(json),202
@@ -49,7 +49,7 @@ def getPartido(id):
             return jsonify('Ha ocurrido el siguiente error : ' + strE),500
 
 @candidato.route("/candidatos/<string:id>",methods=['PUT'])
-def modificarPartido(id):
+def modificarCandidato(id):
     try:
         data = request.get_json()
         if ("cedula" and "num_resolucion" and "nombre" and "apellido") in data:
@@ -69,7 +69,7 @@ def modificarPartido(id):
             return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
 @candidato.route("/candidatos/<string:id>",methods=['DELETE'])
-def eliminarPartido(id):
+def eliminarCandidato(id):
     try:
         json=miControladorCandidato.delete(id)
         if json['deleted_count'] == 0:
