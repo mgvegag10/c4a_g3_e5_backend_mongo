@@ -63,18 +63,35 @@ class RepositorioReporte(InterfaceRepositorio[Resultado]):
     
     def ListadoPartidosVotos(self):
         query1={
-            "$lookup":{"from":"candidato","localField":"candidato_id","foreignField":"_id","as":"resultado"}
+            "$lookup":{"from":"candidato","localField":"candidato.$id","foreignField":"_id","as":"resultado"}
         }
         query2={
-            "$unwind":'$resultado'
+           "$unwind":"$resultado"    
         }
-        query3={
-            "$addFields": {"id_partido":"$.partido"}
-        }
+
         query4={
-            "$project": {"candidato":1,"cantidad_votos": 1,"id_partido": 1}
+            "$lookup":{"from":"partido","localField":"resultado.partido.$id","foreignField":"_id","as":"resultado2"}
         }
-        pipeline = [query1]
-        return self.queryAggregation(pipeline)
-        pipeline = [query1,query2,query3,query4]
+
+        query5={
+           "$unwind":"$resultado2"    
+        }
+
+        query6={
+                "$group":{
+                "_id": {"id":"$resultado2._id", "nombre":"$resultado2.nombre"},
+                "votación":{
+                    "$sum":"$cant_votos"
+                },
+                
+
+            }
+        }
+
+        query7={
+            "$sort": {"votacion": 1}
+        }
+      
+   
+        pipeline = [query1,query2,query4,query5,query6,query7]
         return self.queryAggregation(pipeline)
