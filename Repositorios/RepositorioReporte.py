@@ -60,3 +60,19 @@ class RepositorioReporte(InterfaceRepositorio[Resultado]):
         }
         pipeline = [query, query1, query2]
         return self.queryAggregation(pipeline)
+    
+    def ListadoPartidosVotos(self):
+        query1={
+            "$lookup":{"from":"partido","candidato":"candidato","cantidad_votos":"cant_votos","as":"partido"}
+        }
+        query2={
+            "$unwind":'$partido'
+        }
+        query3={
+            "$addFields": {"id_partido":"partido.id"}
+        }
+        query4={
+            "$project": {"candidato":1,"cantidad_votos": 1,"id_partido": 1}
+        }
+        pipeline = [query1,query2,query3,query4]
+        return self.queryAggregation(pipeline)
