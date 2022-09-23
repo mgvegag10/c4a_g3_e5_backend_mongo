@@ -39,7 +39,11 @@ def getListadoVotosCandidato(id_candidato):
 @reporte.route("/reportes/votos_partidos",methods=['GET'])
 def getListadoPartidosVotos():
     try:
-        json=miControladorResultado.ListadoPartidosVotos()
+        mesa = ""
+        if len(request.args) > 0 and request.args['mesa']:
+            mesa = request.args.get('mesa')
+            
+        json=miControladorResultado.ListadoPartidosVotos(mesa)
         return jsonify(json),200
     except Exception as e:
         strE = format(e)

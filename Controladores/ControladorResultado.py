@@ -74,5 +74,5 @@ class ControladorResultado():
     def ListadoVotosCandidato(self, id_candidato):
         return self.repositorioReportes.ListadoVotosCandidato(id_candidato)
     
-    def ListadoPartidosVotos(self):
-        return self.repositorioReportes.ListadoPartidosVotos()
+    def ListadoPartidosVotos(self, id_mesa=""):
+        return self.repositorioReportes.ListadoPartidosVotos(id_mesa)
