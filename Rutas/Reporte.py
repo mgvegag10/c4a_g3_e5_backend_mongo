@@ -23,7 +23,7 @@ def getListadoVotosCandidatos():
         strE = format(e)
         return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
-@reporte.route("/reportes/votos_candidatos/candidato/<string:id_mesa>",methods=['GET'])
+@reporte.route("/reportes/votos_candidatos/mesa/<string:id_mesa>",methods=['GET'])
 def getListadoVotosCandidato(id_mesa):
     try:
         json=miControladorResultado.ListadoVotosCandidato(id_mesa)
