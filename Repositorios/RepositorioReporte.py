@@ -6,57 +6,168 @@ from bson import ObjectId
 class RepositorioReporte(InterfaceRepositorio[Resultado]):
 
     def ListadoVotosEnMesas(self):
-        query2 = {
-            "$sort": {"participacion": 1}
-        }
         query1 = {
+            "$lookup": {"from": "mesa", "localField": "mesa.$id", "foreignField": "_id", "as": "resultado"}
+        }
+        query2 = {
+            "$unwind": "$resultado"
+        }
+        query3 = {
             "$group": {
-                "_id": "$mesa",
+                "_id": {"id": "$resultado._id", "numero": "$resultado.numero"},
                 "participacion": {
                     "$sum": "$cant_votos"
-                }
+                },
             }
         }
-        query3 ={
-            "$lookup":{
-                "from": "mesa",
-                "localField": "mesa",
-                "foreignField": "_id",
-                "as":"mesa"
-            }
+        query4 = {
+            "$sort": {"participacion": 1}
         }
-        pipeline = [query1,query2]
+        pipeline = [query1,query2,query3,query4]
         return self.queryAggregation(pipeline)
 
     def ListadoVotosCandidatos(self):
         query1 = {
-            "$group": {
-                "_id": "$candidato",
-                "votacion": {
-                    "$sum": "$cant_votos"
-                }
-            }
+            "$lookup": {"from": "candidato", "localField": "candidato.$id", "foreignField": "_id", "as": "resultado"}
         }
         query2 = {
-            "$sort": {"participacion": -1}
+            "$unwind": "$resultado"
         }
-        pipeline = [query1, query2]
+        query3 = {
+            "$lookup": {"from": "partido", "localField": "resultado.partido.$id", "foreignField": "_id",
+                        "as": "resultado2"}
+        }
+
+        query4 = {
+            "$unwind": "$resultado2"
+        }
+        query5 = {
+            "$group": {
+                "_id": {
+                    "id": "$resultado._id",
+                    "nombre": "$resultado.nombre",
+                    "apellido":"$resultado.apellido",
+                    "partido":"$resultado2.nombre"
+                        },
+                "votacion": {
+                    "$sum": "$cant_votos"
+                },
+
+            }
+        }
+        query6 = {
+            "$sort": {"votacion": -1}
+        }
+        pipeline = [query1,query2,query3,query4,query5,query6]
         return self.queryAggregation(pipeline)
 
-    def ListadoVotosCandidato(self, id_candidato):
+    def ListadoVotosCandidato(self, id_mesa):
         query ={
-            "$match":{"candidato.$id": ObjectId(id_candidato)}
+            "$match":{"mesa.$id": ObjectId(id_mesa)}
         }
         query1 = {
-            "$group": {
-                "_id": "$candidato",
-                "votacion": {
-                    "$sum": "$cant_votos"
-                }
-            }
+            "$lookup": {"from": "candidato", "localField": "candidato.$id", "foreignField": "_id", "as": "resultado"}
         }
         query2 = {
-            "$sort": {"participacion": -1}
+            "$unwind": "$resultado"
         }
-        pipeline = [query, query1, query2]
+        query3 = {
+            "$lookup": {"from": "partido", "localField": "resultado.partido.$id", "foreignField": "_id",
+                        "as": "resultado2"}
+        }
+
+        query4 = {
+            "$unwind": "$resultado2"
+        }
+        query5 = {
+            "$group": {
+                "_id": {
+                    "id": "$resultado._id",
+                    "nombre": "$resultado.nombre",
+                    "apellido": "$resultado.apellido",
+                    "partido": "$resultado2.nombre"
+                },
+                "votacion": {
+                    "$sum": "$cant_votos"
+                },
+
+            }
+        }
+        query6 = {
+            "$sort": {"votacion": -1}
+        }
+        pipeline = [query,query1,query2,query3,query4,query5,query6]
+        return self.queryAggregation(pipeline)
+
+    def ListadoPartidosVotos(self):
+        query1 = {
+            "$lookup": {"from": "candidato", "localField": "candidato.$id", "foreignField": "_id", "as": "resultado"}
+        }
+        query2 = {
+            "$unwind": "$resultado"
+        }
+        query3 = {
+            "$lookup": {"from": "partido", "localField": "resultado.partido.$id", "foreignField": "_id",
+                        "as": "resultado2"}
+        }
+        query4 = {
+            "$unwind": "$resultado2"
+        }
+        query5 = {
+            "$group": {
+                "_id": {
+                    "id": "$resultado2._id",
+                    "partido": "$resultado2.nombre"
+                },
+                "votacion": {
+                    "$sum": "$cant_votos"
+                },
+
+            }
+        }
+        query6 = {
+            "$sort": {"votacion": -1}
+        }
+        pipeline = [query1,query2,query3,query4,query5,query6]
+        return self.queryAggregation(pipeline)
+
+    def ListadoCongreso(self):
+        query1 = {
+            "$lookup": {"from": "candidato", "localField": "candidato.$id", "foreignField": "_id", "as": "resultado"}
+        }
+        query2 = {
+            "$unwind": "$resultado"
+        }
+        query3 = {
+            "$lookup": {"from": "partido", "localField": "resultado.partido.$id", "foreignField": "_id",
+                        "as": "resultado2"}
+        }
+
+        query4 = {
+            "$unwind": "$resultado2"
+        }
+        query5 = {
+            "$group": {
+                "_id": {
+                    "id": "$resultado._id",
+                    "partido": "$resultado2.nombre",
+                },
+                "votacion": {
+                    "$sum": "$cant_votos"
+                },
+            }
+        }
+        query6 = {
+            "$sort": {"votacion": -1}
+        }
+        query7 = {
+            "$limit": 3
+        }
+        query8 = {
+            "$group": {
+                "_id": "$_id.partido",
+                "cant_senadores": {"$sum": 1},
+            },
+        }
+        pipeline = [query1,query2,query3,query4,query5,query6,query7,query8]
         return self.queryAggregation(pipeline)
