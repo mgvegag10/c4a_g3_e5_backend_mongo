@@ -23,15 +23,15 @@ def getListadoVotosCandidatos():
         strE = format(e)
         return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
-@reporte.route("/reportes/votos_candidatos/candidato/<string:id_candidato>",methods=['GET'])
-def getListadoVotosCandidato(id_candidato):
+@reporte.route("/reportes/votos_candidatos/candidato/<string:id_mesa>",methods=['GET'])
+def getListadoVotosCandidato(id_mesa):
     try:
-        json=miControladorResultado.ListadoVotosCandidato(id_candidato)
+        json=miControladorResultado.ListadoVotosCandidato(id_mesa)
         return jsonify(json),200
     except Exception as e:
         strE = format(e)
         if strE.__contains__('keys'):
-            return jsonify('Ha ocurrido el siguiente error : El id del candidato no existe'), 400
+            return jsonify('Ha ocurrido el siguiente error : El id de la mesa no existe'), 400
         else:
             return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
 
@@ -44,6 +44,15 @@ def getListadoPartidosVotos():
             mesa = request.args.get('mesa')
             
         json=miControladorResultado.ListadoPartidosVotos(mesa)
+        return jsonify(json),200
+    except Exception as e:
+        strE = format(e)
+        return jsonify('Ha ocurrido el siguiente error : ' + strE), 500
+
+@reporte.route("/reportes/congreso",methods=['GET'])
+def getListadoCongreso():
+    try:
+        json=miControladorResultado.ListadoCongreso()
         return jsonify(json),200
     except Exception as e:
         strE = format(e)
